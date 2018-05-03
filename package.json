@@ -1,0 +1,30 @@
+{
+  "name": "nature-of-code-threejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codyrushing/nature-of-code-threejs.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/codyrushing/nature-of-code-threejs/issues"
+  },
+  "homepage": "https://github.com/codyrushing/nature-of-code-threejs#readme",
+  "dependencies": {
+    "babel-core": "^6.26.3",
+    "babel-plugin-extensible-destructuring": "^4.2.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babelify": "^8.0.0",
+    "budo": "^11.2.0",
+    "d3": "^5.1.0",
+    "three": "^0.92.0",
+    "yargs": "^11.0.0"
+  }
+}
