@@ -36,7 +36,7 @@ d3.timer(
 
     hiddenContext.clearRect(0, 0, width, height);
     hiddenContext.drawImage(canvas, 0, 0, width, height);
-    context.clearRect(0, 0, width, height);
+    // context.clearRect(0, 0, width, height);
     context.drawImage(hiddenCanvas, 0, 0, width, height);
 
     dots.forEach(

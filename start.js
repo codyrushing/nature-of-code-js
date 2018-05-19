@@ -1,7 +1,7 @@
 const budo = require('budo')
 const babelify = require('babelify')
 
-const { path, live, port } = require('yargs').argv
+const { path, live, port, css } = require('yargs').argv
 
 if(!path){
   console.error('Path must be provided');
@@ -11,8 +11,15 @@ if(!path){
 budo(
   path,
   {
-    live: typeof live === 'undefined' ? true : live,
-    open: typeof open === 'undefined' ? true : open,
+    live: typeof live === 'undefined'
+      ? true
+      : live,
+    open: typeof open === 'undefined'
+      ? true
+      : open,
+    css: typeof css === 'undefined'
+      ? 'public/main.css'
+      : css,
     port: port || 8000,
     browserify: {
       transform: [babelify],
