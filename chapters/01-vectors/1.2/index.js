@@ -1,7 +1,11 @@
 import * as d3 from 'd3';
+import Vec2 from '../../../base/vector';
 
-const width = window.innerWidth;
-const height = window.innerHeight;
+const screenDimensions = [
+  window.innerWidth,
+  window.innerHeight
+];
+const [ width, height ] = screenDimensions;
 
 const canvas = document.createElement('canvas');
 const context = canvas.getContext('2d');
@@ -23,37 +27,38 @@ const numDots = 100;
 const dots = d3.range(numDots).map(
   () => {
     return {
-      x: Math.random() * width,
-      y: Math.random() * height,
-      vx: Math.random() * width/100 - width/100/2,
-      vy: Math.random() * height/100 - height/100/2,
+      position: new Vec2(
+        Math.random() * width,
+        Math.random() * height
+      ),
+      velocity: new Vec2(
+        (Math.random() - 0.5) * 2 * width/200,
+        (Math.random() - 0.5) * 2 * height/200
+      )
     };
   }
 );
 
 d3.timer(
   t => {
-
     hiddenContext.clearRect(0, 0, width, height);
     hiddenContext.drawImage(canvas, 0, 0, width, height);
     context.clearRect(0, 0, width, height);
     context.drawImage(hiddenCanvas, 0, 0, width, height);
-
     dots.forEach(
       dot => {
-        dot.x += dot.vx;
-        dot.y += dot.vy;
-        if(dot.x > width || dot.x <= 0){
-          dot.vx = -dot.vx;
+        dot.position.add(dot.velocity);
+        if(dot.position.x > width || dot.position.x <= 0){
+          dot.velocity.x = -dot.velocity.x;
         }
-        if(dot.y > height || dot.y <= 0){
-          dot.vy = -dot.vy;
+        if(dot.position.y > height || dot.position.y <= 0){
+          dot.velocity.y = -dot.velocity.y;
         }
         context.beginPath();
         context.fillStyle = 'red';
-        context.arc(dot.x, dot.y, 4, 0, 2 * Math.PI);
+        context.arc(dot.position.x, dot.position.y, 4, 0, 2 * Math.PI);
         context.fill();
       }
     );
   }
-)
+);
