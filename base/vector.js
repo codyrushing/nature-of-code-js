@@ -50,4 +50,8 @@ Vec2.prototype.dot = function(v) {
   return this.x * v.x + this.y * v.y;
 };
 
+Vec2.prototype.toArray = function(){
+  return [this.x, this.y];
+}
+
 export default Vec2;
