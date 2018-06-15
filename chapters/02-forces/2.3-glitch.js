@@ -39,13 +39,11 @@ const massScale = d3.scaleLinear()
   .clamp(true);
 
 const massDistribution = d3.randomNormal(0.5, 0.25);
-const center = new Vec2(width/2, height/2);
 
 class Dot {
   constructor({position, velocity, mass, acceleration=new Vec2(0,0), i=null}){
     this.position = position;
     this.velocity = velocity;
-    this.initialVelocity = velocity.clone();
     this.acceleration = acceleration;
     this.mass = mass;
     this.i = i;
@@ -53,35 +51,25 @@ class Dot {
   update(){
     // add the two forces together to get net force, which is used to derive acceleration
     this.checkEdges();
-    this.acceleration = this.getAcceleration();
+    this.acceleration = gravity.clone();
     this.position.add(this.velocity);
-    this.velocity.add(this.acceleration).truncate(20);
+    this.velocity.add(this.acceleration);
     this.draw();
-  }
-  getAcceleration(){
-    const rappelVector = center.clone().subtract(this.position);
-    const baseAcceleration = gravity.clone();
-    const neutralRadius = 100;
-    const rappelVectorLength = rappelVector.length();
-    return rappelVectorLength > neutralRadius
-      ? baseAcceleration
-        .add(
-          rappelVector.normalize()
-            .scale(
-              (rappelVectorLength - neutralRadius) * 0.1 * 1/this.mass
-            )
-            .truncate(5)
-        )
-      : baseAcceleration;
   }
   checkEdges(){
     if(this.position.x >= width || this.position.x <= 0){
       this.velocity.x *= -1;
       this.velocity.x += this.acceleration.x;
+      this.position.x = this.position.x > 0
+        ? width
+        : 0;
     }
     if(this.position.y >= height || this.position.y <= 0){
       this.velocity.y *= -1;
       this.velocity.y += this.acceleration.y;
+      this.position.y = this.position.y > 0
+        ? height
+        : 0;
     }
   }
   draw(){
@@ -96,18 +84,18 @@ class Dot {
 
 // init Dots
 const vStart = new Vec2(
-  Math.random(),
-  Math.random()
-);
-const posStart = new Vec2(
   Math.random() * width,
   Math.random() * height
+);
+const posStart = new Vec2(
+  0,
+  0
 );
 const dots = d3.range(numDots).map(
   (v, i) => new Dot(
     {
       position: posStart.clone(),
-      velocity: vStart.clone().scale(5),
+      velocity: vStart.clone(),
       mass: massScale(massDistribution()),
       i
     }
