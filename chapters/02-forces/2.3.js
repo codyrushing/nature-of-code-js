@@ -1,6 +1,6 @@
 /*
 Dots with normal distribution of mass
-Gravity, with rapelling forces
+Gravity, with rapelling forces on the edge
 */
 
 import * as d3 from 'd3';

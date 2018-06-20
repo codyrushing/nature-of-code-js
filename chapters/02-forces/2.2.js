@@ -29,10 +29,11 @@ document.body.appendChild(hiddenCanvas);
 
 hiddenContext.globalAlpha = 0.6;
 
-const numDots = 20;
+const numDots = 1;
 
-const balloonLiftForce = new Vec2(0, -0.1);
+const balloonLiftForce = new Vec2(0, 0.92383984984924);
 var windForce = new Vec2(0, 0);
+const groundElasticFactor = .5;
 
 const massScale = d3.scaleLinear()
   .domain([0, 1])
@@ -55,25 +56,38 @@ class Dot {
       windForce.clone()
         // acceleration is inversely porportional to mass
         .scale(1/this.mass)
+        .scale(0)
     );
+    this.checkEdges();
 
     this.position.add(this.velocity);
     this.velocity.add(this.acceleration);
-    this.checkEdges();
     this.draw();
   }
+
   checkEdges(){
     if(this.position.x >= width || this.position.x <= 0){
-      this.velocity.x *= -1;
-      this.position.x = this.position.x > 0
-        ? width - 1
-        : 1;
+      let overlap = this.position.x > 0
+        ? this.position.x - width
+        : Math.abs(this.position.x);
+      this.velocity.x *= -(typeof groundElasticFactor !== 'undefined' ? groundElasticFactor : 1);
+      if(this.velocity.x < overlap){
+        this.velocity.normalize().scale(overlap);
+      }
+      this.velocity.x += this.acceleration.x;
     }
     if(this.position.y >= height || this.position.y <= 0){
-      this.velocity.y *= -1;
-      this.position.y = this.position.y > 0
-        ? height - 1
-        : 1;
+      let overlap = this.position.y > 0
+        ? this.position.y - height
+        : this.position.y;
+      this.velocity.y *= -(typeof groundElasticFactor !== 'undefined' ? groundElasticFactor : 1);
+      if(
+        (this.position.y < 0 && this.velocity.y < 0)
+        ||
+        (this.position.y > 0 && this.velocity.y > 0)
+      ){
+        this.velocity.y *= -1;
+      }
     }
   }
   draw(){
