@@ -11,7 +11,6 @@ export default class Mover {
   }
   update(){
     // add the two forces together to get net force, which is used to derive acceleration
-    this.skipMove = false;
     this.checkEdges();
     this.acceleration = this.getAcceleration();
     this.velocity.add(this.acceleration);

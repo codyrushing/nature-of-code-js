@@ -33,7 +33,15 @@ hiddenContext.globalAlpha = 0.6;
 
 const numDots = 20;
 const gravity = new Vec2(0, 0.5);
-const groundElasticFactor = 1;
+
+// init attractor
+const attractor = {
+  position: new Vec2(
+    width/2,
+    height/2
+  ),
+  mass: 30
+};
 
 const massScale = d3.scaleLinear()
   .domain([0, 1])
@@ -58,12 +66,21 @@ class Dot extends Mover {
       );
   }
   checkEdges(){
-    return super.checkEdges(screenDimensions, groundElasticFactor);
+    return;
   }
   draw(){
     super.draw(context);
   }
 }
+
+// init attractor
+const attractor = {
+  position: new Vec2(
+    width/2,
+    height/2
+  ),
+  mass: 30
+};
 
 // init Dots
 const dots = d3.range(numDots).map(
@@ -71,11 +88,15 @@ const dots = d3.range(numDots).map(
     {
       position: new Vec2(
         Math.random() * width,
-        0
+        Math.random() * height
       ),
       velocity: new Vec2(
-        0,
-        0
+        Math.random()
+          * 5
+          * Math.random() > 0.5 ? 1 : -1,
+        Math.random()
+          * 5
+          * Math.random() > 0.5 ? 1 : -1
       ),
       mass: massScale(massDistribution()),
       i
@@ -99,24 +120,18 @@ context.closePath();
 
 d3.timer(
   t => {
-    // draw water
-    context.beginPath();
-    context.rect(
-      0,
-      height/2,
-      width,
-      height/2
-    );
-    context.fillStyle = 'rgba(0,150,180,0.2)';
-    context.fill();
-    context.strokeStyle = 'rgba(0,150,180,1)';
-    context.stroke();
-    context.closePath();
-
     hiddenContext.clearRect(0, 0, width, height);
     hiddenContext.drawImage(canvas, 0, 0, width, height);
     context.clearRect(0, 0, width, height);
     context.drawImage(hiddenCanvas, 0, 0, width, height);
+
+    // draw attractor
+    context.beginPath();
+    context.fillStyle = 'rgba(30,30,30,0.5)';
+    context.arc(attractor.position.x, attractor.position.y, attractor.mass, 0, 2 * Math.PI);
+    context.fill();
+    context.strokeStyle = 'rgba(30,30,30,1)';
+    context.stroke();
 
     dots.forEach(
       dot => dot.update()
