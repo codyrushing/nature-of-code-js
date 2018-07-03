@@ -13,3 +13,9 @@ When working with forces, remember that forces are directly proportional to acce
   Vunit = Velocity unit vector
 )
 ```
+
+### Gravity
+```
+->F = (G * m1 * m2)/(r^2);
+```
+Gravitational Force between two objects is the product of their masses divided by the square of the distance between them.  This force is in the direction of the vector between the two objects.  All of this is multiplied by some Gravitation constant G (which can be ignored for this simulations)

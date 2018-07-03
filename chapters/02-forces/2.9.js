@@ -34,15 +34,6 @@ hiddenContext.globalAlpha = 0.6;
 const numDots = 20;
 const gravity = new Vec2(0, 0.5);
 
-// init attractor
-const attractor = {
-  position: new Vec2(
-    width/2,
-    height/2
-  ),
-  mass: 30
-};
-
 const massScale = d3.scaleLinear()
   .domain([0, 1])
   .range([5, 30])
@@ -52,21 +43,22 @@ const massDistribution = d3.randomNormal(0.5, 0.25);
 
 class Dot extends Mover {
   getAcceleration(){
-    if(this.position.y < height/2){
-      return gravity.clone();
-    }
-    const viscosity = 0.1;
-    const velocityMagnitude = this.velocity.length();
-    return gravity.clone()
-      // apply drag from liquid
-      .add(
-        this.velocity.clone()
-          .normalize()
-          .scale( -Math.pow(velocityMagnitude, 2) * viscosity / this.mass )
-      );
+    const r = attractor.position.clone().subtract(this.position);
+    const distance = r.length();
+    const G = 20;
+
+    const f = r.normalize()
+      .scale(
+        100 * this.mass * attractor.mass / (distance * distance)
+      )
+      .scale(
+        1 / this.mass
+      )
+      .truncate(5);
+    return f
   }
   checkEdges(){
-    return;
+    // do nothing
   }
   draw(){
     super.draw(context);
@@ -92,10 +84,10 @@ const dots = d3.range(numDots).map(
       ),
       velocity: new Vec2(
         Math.random()
-          * 5
+          * 1
           * Math.random() > 0.5 ? 1 : -1,
         Math.random()
-          * 5
+          * 1
           * Math.random() > 0.5 ? 1 : -1
       ),
       mass: massScale(massDistribution()),
