@@ -4,9 +4,6 @@ Helium balloons accelerating updwards with some perlin noise wind
 
 import * as d3 from 'd3';
 import Vec2 from '../../base/vector';
-import { Noise } from 'noisejs';
-
-const noise = new Noise(Math.random());
 
 const screenDimensions = [
   window.innerWidth,
@@ -29,10 +26,24 @@ document.body.appendChild(hiddenCanvas);
 
 hiddenContext.globalAlpha = 0.5;
 
-var angle = 0;
-var aVelocity = 0;
-var aAcceleration = 0.001;
-var maxVelocity = 0.2;
+const projectiles = [];
+
+const angleDegreesScale = d3.scaleLinear()
+  .domain([0,1])
+  .range([20,70]);
+
+const velocityScale = d3.scaleLinear()
+  .domain([0,1])
+  .range([5,15])
+
+// create new projectiles on an interval
+setInterval(
+  () => {
+    angleDegreesScale
+  },
+  2000
+)
+
 d3.timer(
   t => {
     hiddenContext.clearRect(0, 0, width, height);
