@@ -20,3 +20,18 @@ Forgetting to `save()` before translating and `restore()` will cause subsequent 
 
 ### Rotations
 Rotational transformation are kind of simpler than 2d vector transformations because rotations are simple scalars (a unitless value).
+
+You will usually want to `translate()` before you `rotate()` when drawing an object.  Rotating first changes the entire coordinate system, and they your translate is not where you expect it to be.
+
+### Basic trig
+* __sin, cos, tan__ - get an x or y value for a given angle
+* There are inverse methods for doing the opposite, deriving an angle from an x and y (a vector).
+
+Eg. rotating an object in the direction that it is facing.  In that case, use `atan2(y, x)`.
+
+```js
+// derive a vector from a known angle
+tan(a) = y/x
+// derive an angle from a known vector
+atan2(y/x) = a;
+```

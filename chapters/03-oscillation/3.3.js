@@ -44,24 +44,26 @@ class Projectile extends Mover {
   constructor(params){
     super(params);
     this.aPosition = 0;
-    this.aVelocity = this.velocity.length()/50;
   }
   update(){
     this.checkEdges([width, height], groundElasticFactor);
     this.acceleration = gravity;
     this.velocity.add(this.acceleration);
-    this.aVelocity = this.velocity.length()/50;
+    // this.aVelocity = this.velocity.length()/50;
     this.position.add(this.velocity);
-    this.aPosition += this.aVelocity;
+    // this.aPosition += this.aVelocity;
     this.draw();
   }
   draw(){
     context.save();
     context.beginPath();
     context.translate(this.position.x, this.position.y);
-    context.rotate(this.aPosition);
-    context.rect(-10, -2, 20, 4);
+    context.rotate(Math.atan2(this.velocity.y, this.velocity.x));
+    context.rect(-15, -2, 30, 4);
+    context.fillStyle = 'red';
     context.fill();
+    context.strokeStyle = 'black';
+    context.stroke();
     context.restore();
   }
 }
