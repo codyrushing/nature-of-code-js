@@ -35,3 +35,12 @@ tan(a) = y/x
 // derive an angle from a known vector
 atan2(y/x) = a;
 ```
+
+_Polar coordinates_ - you can use angle and radius to define a point in 2D space.
+
+```
+y = sin(angle) * r
+x = cos(angle) * r
+```
+
+`r` is they hypotenuse, or the magnitude of the vector in question.
