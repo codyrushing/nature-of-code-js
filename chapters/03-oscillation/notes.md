@@ -36,7 +36,7 @@ tan(a) = y/x
 atan2(y/x) = a;
 ```
 
-_Polar coordinates_ - you can use angle and radius to define a point in 2D space.
+__Polar coordinates__ - you can use angle and radius to define a point in 2D space.
 
 ```
 y = sin(angle) * r
