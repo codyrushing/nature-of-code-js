@@ -22,35 +22,29 @@ document.body.appendChild(hiddenCanvas);
 
 hiddenContext.globalAlpha = 0.5;
 
-const amplitude = height/4;
+const velocity = 0.01;
 
-// so instead of boiling everything down to a position vector
-// our goal is to boil everything down to an angle, and then deriving x and y position from that
-// 
 class Oscillator {
-  constructor({velocity, acceleration, angle, amplitude}){
-    this.velocity = velocity;
-    this.angle = angle;
-    this.amplitude = amplitude;
-    this.acceleration = acceleration;
+  constructor({x}){
+    this.x = x;
+    this.angle = x * velocity;
   }
   update(){
     // angle keeps increasing, which is fine because we are just taking the sin() cos() of it
-    this.velocity = this.velocity.add(this.acceleration).truncate(0.05);
-    this.angle.add(this.velocity);
+    this.angle += velocity;
+    this.x += Math.cos(velocity);
+    if(this.x > width){
+      this.x -= width;
+      this.angle = 0;
+    }
     this.draw();
   }
   draw(){
-    const x = Math.cos(this.angle.x) * this.amplitude.x;
-    const y = Math.sin(this.angle.y) * this.amplitude.y;
-    context.save();
-    context.translate(width/2, height/2);
     context.beginPath();
-    context.lineTo(0, 0);
     context.fillStyle = 'red';
     context.arc(
-      x,
-      y,
+      this.x,
+      (height/2-5) + Math.sin(this.angle) * height/2,
       10,
       0,
       2 * Math.PI
@@ -58,24 +52,15 @@ class Oscillator {
     context.fill();
     context.strokeStyle = 'black';
     context.stroke();
-    context.restore();
   }
 }
 
-const numOfDots = 20;
+const numOfDots = 100;
 
 const dots = d3.range(numOfDots).map(
-  () => {
-    const vMultiplier = 1;
+  (item, i) => {
     return new Oscillator({
-      // random 2d vector, analagous for position
-      angle: new Vec2(Math.random(), Math.random()),
-      // another random vector that will be used to change velocity
-      acceleration: new Vec2(Math.random(), Math.random()).scale(vMultiplier),
-      // starting velocity of 0
-      velocity: new Vec2(0,0),
-      // distance from center
-      amplitude: new Vec2(Math.random() * width/2, Math.random() * height/2)
+      x: width/numOfDots/2 + width/numOfDots * i+1
     });
   }
 );
